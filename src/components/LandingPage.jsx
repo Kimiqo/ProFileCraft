@@ -1,11 +1,17 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LandingPage() {
+  const navigator = useNavigate();
+  const handleNavigate = () => {
+    navigator("/home");
+  }
+
   return (
-    <>
+    <div className="relative w-full min-h-screen overflow-hidden">
       {/* Video Background */}
-      <div className="absolute top-0 left-0 w-full h-full -z-10">
+      <div className="absolute top-0 left-0 w-full  -z-10">
         <video
           autoPlay
           loop
@@ -14,36 +20,33 @@ export default function LandingPage() {
           className="w-full h-full object-cover"
         >
           <source src="/landingPageVid.mp4" type="video/mp4" />
-
           Your browser does not support the video tag.
         </video>
       </div>
 
       {/* Content */}
-      <main className="relative flex flex-col gap-5 mx-auto mt-10 p-5 rounded-lg justify-center justify-evenly text-center text-white" 
-            style={{ height: 750, width: '97%' }}>
-        <h2 className="text-3xl font-bold">Welcome to ProFile Craft</h2>
-        <p className="mt-4 text-red-200 italic">
-          ProFile Craft is an intuitive and sleek CV/resumé builder designed to empower professionals and job seekers in crafting outstanding profiles with ease. Whether you're a student, an experienced professional, or someone starting afresh, ProFile Craft helps you create visually appealing, tailored CVs that showcase your skills and achievements effectively.
+      <main className="relative flex flex-col gap-5 items-center justify-center min-h-screen p-8 text-center text-white">
+        <h2 className="text-4xl md:text-5xl font-bold font-serif leading-tight">
+          Welcome to ProFile Craft
+        </h2>
+        <p className="mt-4 text-lg md:text-xl text-red-200 italic max-w-2xl">
+          ProFile Craft is an intuitive CV/resumé builder empowering professionals and job seekers to create visually appealing profiles with ease.
         </p>
-        <div className="flex flex-row gap-5 justify-center m-5">
-          <motion.button 
+        <motion.button 
             className="bg-slate-50 p-3 rounded-md text-black"
             whileTap={{ scale: 0.9 }}
             whileHover={{ scale: 1.3, backgroundColor: 'green', color: 'white' }}
             transition={{ bounceDamping: 10, bounceStiffness: 500 }}
+            onClick={handleNavigate}
           >
             Get Started
           </motion.button>
-        </div>
       </main>
 
       {/* Footer */}
-      <footer className="flex flex-row p-1 w-full bg-slate-800 h-14 bottom-0 left-0 right-0 items-center justify-center text-white text-base">
-        <div>
-          <h3>Kimiko Dev 2025 © All rights reserved</h3>
-        </div>
+      <footer className="fixed bottom-0 left-0 flex items-center justify-center bg-slate-800 h-14 text-white text-sm w-full">
+        <p>Kimiko Dev 2025 © All rights reserved</p>
       </footer>
-    </>
+    </div>
   );
 }
