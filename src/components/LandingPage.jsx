@@ -27,10 +27,10 @@ export default function LandingPage() {
       {/* Content */}
       <main className="relative flex flex-col gap-5 items-center justify-center min-h-screen p-8 text-center text-white">
         <h2 className="text-4xl md:text-5xl font-bold font-serif leading-tight">
-          Welcome to ProFile Craft
+          Welcome to ProFile Kraft
         </h2>
         <p className="mt-4 text-lg md:text-xl text-red-200 italic max-w-2xl">
-          ProFile Craft is an intuitive CV/resumé builder empowering professionals and job seekers to create visually appealing profiles with ease.
+          ProFile Kraft is an intuitive CV/resumé builder empowering professionals and job seekers to create visually appealing profiles with ease.
         </p>
         <motion.button 
             className="bg-slate-50 p-3 rounded-md text-black"
