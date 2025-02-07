@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import ProfessionalExperience from "./form/ProfessionalExperience";
 import ExperiencePreview from "./preview/ExperiencePreview";
@@ -13,7 +13,26 @@ import EducationPreview from "./preview/EducationPreview";
 import DownloadButton from "./DownloadButton";
 
 export default function InfoPage() {
+  const formRef = useRef(null);
   const previewRef = useRef(null);
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!formRef.current || !previewRef.current) return;
+      
+      const formRect = formRef.current.getBoundingClientRect();
+      const previewRect = previewRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      
+      // If preview section takes up more than 50% of the viewport height, we're in preview mode
+      const isInPreviewArea = previewRect.top < windowHeight / 2;
+      setIsPreviewMode(isInPreviewArea);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   
   // Use local storage for all state
   const [experienceList, setExperienceList] = useLocalStorage('experienceList', []);
@@ -42,9 +61,9 @@ export default function InfoPage() {
   }
 
   return (
-    <div className="relative w-full min-h-screen overflow-hidden flex text-white">
+    <div className="relative w-full min-h-screen overflow-hidden flex flex-col md:flex-row text-white">
       {/* Left Section */}
-      <section className="w-2/5 min-h-screen border-y-4 border-yellow-300 p-5">
+      <section ref={formRef} className="w-full md:w-2/5 min-h-screen border-y-4 border-yellow-300 p-5">
         <div className="flex justify-center gap-2 mb-5">
           <img src="" alt="Logo" />
           <h2 className="text-center text-2xl font-bold">ProFile Kraft</h2>
@@ -126,7 +145,7 @@ export default function InfoPage() {
       </section>
 
       {/* Preview Section */}
-      <section ref={previewRef} className="w-3/5 min-h-screen border-y-4 border-yellow-300 bg-white p-8 shadow-lg overflow-y-auto">
+      <section ref={previewRef} className="w-full md:w-3/5 min-h-screen border-y-4 border-yellow-300 bg-white p-8 shadow-lg overflow-y-auto">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
           <div className="mb-8 text-center">
@@ -188,7 +207,22 @@ export default function InfoPage() {
           )}
         </div>
       </section>
-      <div className="fixed bottom-8 right-8 flex gap-4">
+      {/* Mobile Preview/Edit Toggle Button */}
+      <button
+        onClick={() => {
+          setIsPreviewMode(!isPreviewMode);
+          if (!isPreviewMode) {
+            previewRef.current?.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            formRef.current?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }}
+        className="fixed bottom-24 right-8 md:hidden bg-yellow-300 text-slate-800 px-6 py-2 rounded-full font-semibold shadow-lg hover:bg-yellow-400 transition-colors z-50"
+      >
+        {isPreviewMode ? '✏️ Edit' : '👁️ Preview'}
+      </button>
+
+      <div className="fixed bottom-8 right-8 flex gap-4 md:flex-row flex-col-reverse">
         <button
           onClick={() => {
             // Clear all data from local storage
